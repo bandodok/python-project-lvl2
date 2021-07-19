@@ -6,8 +6,11 @@ authors = ["Dmitrij Svetov <bandodok@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
+argparse = "^1.4.0"
 
 [tool.poetry.dev-dependencies]
+flake8 = "^3.9.2"
+pytest = "^6.2.4"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
