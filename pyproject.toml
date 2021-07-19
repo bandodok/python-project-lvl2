@@ -3,10 +3,16 @@ name = "hexlet-code"
 version = "0.1.0"
 description = ""
 authors = ["Dmitrij Svetov <bandodok@gmail.com>"]
+packages = [
+  { include = "gendiff" },
+]
 
 [tool.poetry.dependencies]
 python = "^3.9"
 argparse = "^1.4.0"
+
+[tool.poetry.scripts]
+gendiff = "gendiff.scripts.gendiff:main"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^3.9.2"
