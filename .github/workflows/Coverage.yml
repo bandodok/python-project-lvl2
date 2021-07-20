@@ -1,0 +1,30 @@
+name: Python CI
+
+on:
+  - push
+  - pull_request
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+        # make depends on poetry
+      - name: Install dependencies
+        run: |
+          pip install poetry
+          make install
+      - name: Test & publish code coverage
+        uses: paambaati/codeclimate-action@v2.7.4
+        env:
+          CC_TEST_REPORTER_ID: de4fb89c6a380de968169ded11c5f5b93474c5ceef1988efb8db0c0ea0f222e6
+        with:
+          coverageCommand: make test-coverage
+          debug: true
