@@ -1,6 +1,12 @@
 import json
 
 
+def make_files(args):
+    file1 = json.load(open(args['first_file']))
+    file2 = json.load(open(args['second_file']))
+    return file1, file2
+
+
 def make_diff(f1, f2):
     diff = {}
     diff.update(
@@ -28,6 +34,5 @@ def plain_diff(diff):
 
 
 def diff_create(args):
-    file1 = json.load(open(args['first_file']))
-    file2 = json.load(open(args['second_file']))
+    file1, file2 = make_files(args)
     return plain_diff(make_diff(file1, file2))
