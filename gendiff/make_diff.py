@@ -1,10 +1,16 @@
 import json
+import yaml
 
 
 def make_files(args):
-    file1 = json.load(open(args['first_file']))
-    file2 = json.load(open(args['second_file']))
-    return file1, file2
+    if args['first_file'].endswith('.json'):
+        file1 = json.load(open(args['first_file']))
+        file2 = json.load(open(args['second_file']))
+        return file1, file2
+    elif args['first_file'].endswith(('.yml', '.yaml')):
+        file1 = yaml.safe_load(open(args['first_file']))
+        file2 = yaml.safe_load(open(args['second_file']))
+        return file1, file2
 
 
 def make_diff(f1, f2):

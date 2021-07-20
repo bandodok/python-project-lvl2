@@ -1,12 +1,21 @@
 import pytest
 import json
+import yaml
 from ast import literal_eval
 from gendiff.make_diff import make_files, make_diff, plain_diff, diff_create
 
 
 @pytest.fixture
 def get_args():
-    args = 'tests/fixtures/args.txt'
+    args = 'tests/fixtures/json_args.txt'
+    output = [lines for lines in open(args)]
+    output = ''.join(output)
+    return literal_eval(output)
+
+
+@pytest.fixture
+def get_yml_args():
+    args = 'tests/fixtures/yml_args.txt'
     output = [lines for lines in open(args)]
     output = ''.join(output)
     return literal_eval(output)
@@ -18,6 +27,15 @@ def get_files():
     f2 = 'tests/fixtures/file2.json'
     file1 = json.load(open(f1))
     file2 = json.load(open(f2))
+    return file1, file2
+
+
+@pytest.fixture
+def get_yml_files():
+    f1 = 'tests/fixtures/file1.yml'
+    f2 = 'tests/fixtures/file2.yaml'
+    file1 = yaml.safe_load(open(f1))
+    file2 = yaml.safe_load(open(f2))
     return file1, file2
 
 
@@ -37,12 +55,15 @@ def get_expectation():
     return output
 
 
-def test_make_files(get_args, get_files):
+def test_make_files(get_args, get_files, get_yml_args, get_yml_files):
     assert make_files(get_args) == get_files
+    assert make_files(get_yml_args) == get_yml_files
 
 
-def test_make_diff(get_files, get_diff):
+def test_make_diff(get_files, get_yml_files, get_diff):
     f1, f2, = get_files
+    assert make_diff(f1, f2) == get_diff
+    f1, f2, = get_yml_files
     assert make_diff(f1, f2) == get_diff
 
 
