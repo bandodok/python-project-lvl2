@@ -13,16 +13,15 @@ def make_diff(f1, f2):
 def plain_diff(diff):
     out = ['{']
     for i in diff:
-        if diff[i]['old'] == diff[i]['new']:
+        if diff[i]['old'] is None:
+            out.append('  + {}: {}'.format(i, diff[i]['new']))
+        elif diff[i]['new'] is None:
+            out.append('  - {}: {}'.format(i, diff[i]['old']))
+        elif diff[i]['old'] == diff[i]['new']:
             out.append('    {}: {}'.format(i, diff[i]['new']))
-        if diff[i]['old'] != diff[i]['new']:
-            if diff[i]['old'] is None:
-                out.append('  + {}: {}'.format(i, diff[i]['new']))
-            elif diff[i]['new'] is None:
-                out.append('  - {}: {}'.format(i, diff[i]['old']))
-            else:
-                out.append('  - {}: {}'.format(i, diff[i]['old']))
-                out.append('  + {}: {}'.format(i, diff[i]['new']))
+        else:
+            out.append('  - {}: {}'.format(i, diff[i]['old']))
+            out.append('  + {}: {}'.format(i, diff[i]['new']))
     out.append('}')
     return "\n".join(out)
 
