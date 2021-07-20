@@ -2,7 +2,7 @@ import pytest
 import json
 import yaml
 from ast import literal_eval
-from gendiff.make_diff import make_files, make_diff, plain_diff, diff_create
+from gendiff.make_diff import parse_files, make_diff, plain_diff, diff_create
 
 
 @pytest.fixture
@@ -56,8 +56,8 @@ def get_expectation():
 
 
 def test_make_files(get_args, get_files, get_yml_args, get_yml_files):
-    assert make_files(get_args) == get_files
-    assert make_files(get_yml_args) == get_yml_files
+    assert parse_files(get_args) == get_files
+    assert parse_files(get_yml_args) == get_yml_files
 
 
 def test_make_diff(get_files, get_yml_files, get_diff):

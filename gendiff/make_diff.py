@@ -1,16 +1,4 @@
-import json
-import yaml
-
-
-def make_files(args):
-    if args['first_file'].endswith('.json'):
-        file1 = json.load(open(args['first_file']))
-        file2 = json.load(open(args['second_file']))
-        return file1, file2
-    elif args['first_file'].endswith(('.yml', '.yaml')):
-        file1 = yaml.safe_load(open(args['first_file']))
-        file2 = yaml.safe_load(open(args['second_file']))
-        return file1, file2
+from gendiff.Parser import parse_files
 
 
 def make_diff(f1, f2):
@@ -40,5 +28,5 @@ def plain_diff(diff):
 
 
 def diff_create(args):
-    file1, file2 = make_files(args)
+    file1, file2 = parse_files(args)
     return plain_diff(make_diff(file1, file2))
