@@ -12,3 +12,16 @@ def parse_files(args):
         file1 = yaml.safe_load(file1)
         file2 = yaml.safe_load(file2)
     return file1, file2
+
+
+def str_replace(tree):
+    corr_str = {
+        False: 'false',
+        True: 'true',
+    }
+    for i, v in tree.items():
+        if type(v) == dict:
+            str_replace(v)
+        elif v in corr_str.keys():
+            tree[i] = corr_str[v]
+    return tree
