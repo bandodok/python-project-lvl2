@@ -28,6 +28,8 @@ def get_files():
     f2 = 'tests/fixtures/file2.json'
     file1 = json.load(open(f1))
     file2 = json.load(open(f2))
+    str_replace(file1)
+    str_replace(file2)
     return file1, file2
 
 
@@ -37,6 +39,8 @@ def get_yml_files():
     f2 = 'tests/fixtures/file2.yaml'
     file1 = yaml.safe_load(open(f1))
     file2 = yaml.safe_load(open(f2))
+    str_replace(file1)
+    str_replace(file2)
     return file1, file2
 
 

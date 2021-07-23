@@ -11,6 +11,8 @@ def parse_files(args):
     elif args['first_file'].endswith(('.yml', '.yaml')):
         file1 = yaml.safe_load(file1)
         file2 = yaml.safe_load(file2)
+    str_replace(file1)
+    str_replace(file2)
     return file1, file2
 
 
