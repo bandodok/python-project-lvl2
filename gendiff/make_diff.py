@@ -62,15 +62,15 @@ def tree_to_tree_diff(tree, tree1):
 def tree_to_str(tree, tree1):
     value = get_value(get_value(tree))
     key = get_key(get_value(tree))
-    out_tree = mkfile(get_key(tree), mkfile(key, value, value), get_value(tree1))
-    return out_tree
+    out = mkfile(get_key(tree), mkfile(key, value, value), get_value(tree1))
+    return out
 
 
 def str_to_tree(tree, tree1):
     value = get_value(get_value(tree))
     key = get_key(get_value(tree))
-    out_tree = mkfile(get_key(tree), mkfile(key, value, value), get_value(tree1))
-    return out_tree
+    out = mkfile(get_key(tree), mkfile(key, value, value), get_value(tree1))
+    return out
 
 
 def update_status(out_tree, tree, tree1):
