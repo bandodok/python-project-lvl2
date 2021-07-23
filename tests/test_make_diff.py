@@ -30,7 +30,7 @@ def get_files():
     file2 = json.load(open(f2))
     str_replace(file1)
     str_replace(file2)
-    return file1, file2
+    return {'MAIN': file1}, {'MAIN': file2}
 
 
 @pytest.fixture
@@ -41,7 +41,7 @@ def get_yml_files():
     file2 = yaml.safe_load(open(f2))
     str_replace(file1)
     str_replace(file2)
-    return file1, file2
+    return {'MAIN': file1}, {'MAIN': file2}
 
 
 @pytest.fixture

@@ -13,7 +13,7 @@ def parse_files(args):
         file2 = yaml.safe_load(file2)
     str_replace(file1)
     str_replace(file2)
-    return file1, file2
+    return {'MAIN': file1}, {'MAIN': file2}
 
 
 def str_replace(tree):
