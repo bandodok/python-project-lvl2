@@ -55,6 +55,22 @@ def get_expectation():
     return output
 
 
+def test_str_replace():
+    new_tree = {
+        'one': False,
+        'two': None,
+        'three': True,
+        'four': 'false'
+    }
+    str_replace(new_tree)
+    assert new_tree == {
+        'one': 'false',
+        'two': None,
+        'three': 'true',
+        'four': 'false'
+    }
+
+
 def test_make_files(get_args, get_files, get_yml_args, get_yml_files):
     assert parse_files(get_args) == get_files
     assert parse_files(get_yml_args) == get_yml_files
