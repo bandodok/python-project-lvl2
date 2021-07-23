@@ -3,6 +3,7 @@ import json
 import yaml
 from ast import literal_eval
 from gendiff.make_diff import parse_files, make_diff, plain_diff, diff_create
+from gendiff.Parser import str_replace
 
 
 @pytest.fixture
