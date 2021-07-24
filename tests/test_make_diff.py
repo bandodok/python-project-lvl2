@@ -73,6 +73,7 @@ def get_diff():
     output = ''.join(output)
     return literal_eval(output)
 
+
 @pytest.fixture
 def get_r_diff():
     diff = 'tests/fixtures/r_diff.txt'
@@ -110,7 +111,7 @@ def test_make_files(get_args, get_files, get_yml_args, get_yml_files):
     assert parse_files(get_yml_args) == get_yml_files
 
 
-def test_make_diff(get_files, get_yml_files, get_r_files, get_r_yml_files, get_diff):
+def test_make_diff(get_files, get_yml_files, get_diff):
     f1, f2, = get_files
     assert make_diff(f1, f2) == get_diff
     f1, f2, = get_yml_files
