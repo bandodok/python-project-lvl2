@@ -156,4 +156,5 @@ def stylish_diff(diff):
 
 def diff_create(args):
     file1, file2 = parse_files(args)
-    return plain_diff(make_diff(file1, file2))
+    if args['format'] == 'stylish':
+        return stylish_diff(make_diff(file1, file2))
