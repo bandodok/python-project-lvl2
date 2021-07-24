@@ -15,6 +15,22 @@ def get_args():
 
 
 @pytest.fixture
+def get_r_args():
+    args = 'tests/fixtures/r_json_args.txt'
+    output = [lines for lines in open(args)]
+    output = ''.join(output)
+    return literal_eval(output)
+
+
+@pytest.fixture
+def get_reverse_r_args():
+    args = 'tests/fixtures/reverse_r_json_args.txt'
+    output = [lines for lines in open(args)]
+    output = ''.join(output)
+    return literal_eval(output)
+
+
+@pytest.fixture
 def get_yml_args():
     args = 'tests/fixtures/yml_args.txt'
     output = [lines for lines in open(args)]
@@ -90,6 +106,22 @@ def get_expectation():
     return output
 
 
+@pytest.fixture
+def get_r_expectation():
+    expect = 'tests/fixtures/r_expectation.txt'
+    output = [lines for lines in open(expect)]
+    output = ''.join(output)
+    return output
+
+
+@pytest.fixture
+def get_reverse_r_expectation():
+    expect = 'tests/fixtures/reverse_r_expectation.txt'
+    output = [lines for lines in open(expect)]
+    output = ''.join(output)
+    return output
+
+
 def test_str_replace():
     new_tree = {
         'one': False,
@@ -126,8 +158,17 @@ def test_make_r_diff(get_r_files, get_r_yml_files, get_r_diff):
 
 
 def test_plain_diff(get_diff, get_expectation):
-    assert plain_diff(get_diff['MAIN']) == get_expectation
+    assert plain_diff(get_diff) == get_expectation
+
+
+def test_r_plain_diff(get_r_diff, get_r_expectation):
+    assert plain_diff(get_r_diff) == get_r_expectation
 
 
 def test_diff_create(get_args, get_expectation):
     assert diff_create(get_args) == get_expectation
+
+
+def test_r_diff_create(get_r_args, get_reverse_r_args, get_r_expectation, get_reverse_r_expectation):
+    assert diff_create(get_r_args) == get_r_expectation
+    assert diff_create(get_reverse_r_args) == get_reverse_r_expectation
