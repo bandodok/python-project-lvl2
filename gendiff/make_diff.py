@@ -67,7 +67,7 @@ def tree_to_str(tree, tree1):
 
 
 def str_to_tree(tree, tree1):
-    value = get_value(get_value(tree))
+    value = get_value(get_value(tree1))
     key = get_key(get_value(tree1))
     out = mkfile(get_key(tree), get_value(tree), mkfile(key, value, value))
     return out
@@ -83,6 +83,15 @@ def update_status(out_tree, tree, tree1):
 
 def value_is_dict(tree):
     return type(get_value(tree)) == dict
+
+
+def dir_format(index, value, out, depth):
+    if value.get('status') == 'add':
+        out.append('{}+ {}: {}'.format((' ' * depth), index, '{'))
+    elif value.get('status') == 'remove':
+        out.append('{}- {}: {}'.format((' ' * depth), index, '{'))
+    else:
+        out.append('{}  {}: {}'.format((' ' * depth), index, '{'))
 
 
 def make_diff(tree, tree1):
@@ -109,20 +118,42 @@ def make_diff(tree, tree1):
 
 def plain_diff(diff):
     out = ['{']
-    for i, v in diff.items():
-        if v['old'] is None:
-            out.append('  + {}: {}'.format(i, v['new']))
-        elif v['new'] is None:
-            out.append('  - {}: {}'.format(i, v['old']))
-        elif v['old'] == diff[i]['new']:
-            out.append('    {}: {}'.format(i, v['new']))
-        else:
-            out.append('  - {}: {}'.format(i, v['old']))
-            out.append('  + {}: {}'.format(i, v['new']))
-    out.append('}')
-    return "\n".join(out)
+
+    def inner(diff, depth):
+        for i, v in diff.items():
+            if i == 'MAIN':
+                inner(v, depth)
+                return "\n".join(out)
+            if i == 'status':
+                continue
+            if get_key(v) != 'old':
+                dir_format(i, v, out, depth)
+                new_depth = depth + 4
+                inner(v, new_depth)
+            elif v['old'] is None:
+                out.append('{}+ {}: {}'.format((' ' * depth), i, v['new']))
+            elif v['new'] is None:
+                out.append('{}- {}: {}'.format((' ' * depth), i, v['old']))
+            elif v['old'] == v['new']:
+                out.append('{}  {}: {}'.format((' ' * depth), i, v['new']))
+            else:
+                if type(v['old']) is dict:
+                    new_depth = depth + 4
+                    out.append('{}- {}: {}'.format((' ' * depth), i, '{'))
+                    inner(v['old'], new_depth)
+                else:
+                    out.append('{}- {}: {}'.format((' ' * depth), i, v['old']))
+                if type(v['new']) is dict:
+                    new_depth = depth + 4
+                    out.append('{}+ {}: {}'.format((' ' * depth), i, '{'))
+                    inner(v['new'], new_depth)
+                else:
+                    out.append('{}+ {}: {}'.format((' ' * depth), i, v['new']))
+        out.append('{}'.format(' ' * (depth - 2)) + '}')
+        return "\n".join(out)
+    return inner(diff, 2)
 
 
 def diff_create(args):
     file1, file2 = parse_files(args)
-    return plain_diff(make_diff(file1, file2)['MAIN'])
+    return plain_diff(make_diff(file1, file2))
