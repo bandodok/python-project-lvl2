@@ -116,7 +116,7 @@ def make_diff(tree, tree1):
     return out_tree
 
 
-def plain_diff(diff):
+def stylish_diff(diff):
     out = ['{']
 
     def inner(diff, depth):

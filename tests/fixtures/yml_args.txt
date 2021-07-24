@@ -1,1 +1,1 @@
-{'first_file': 'tests/fixtures/file1.yml', 'second_file': 'tests/fixtures/file2.yaml', 'format': 0}
+{'first_file': 'tests/fixtures/file1.yml', 'second_file': 'tests/fixtures/file2.yaml', 'format': 'stylish'}

@@ -2,7 +2,7 @@ import pytest
 import json
 import yaml
 from ast import literal_eval
-from gendiff.make_diff import parse_files, make_diff, plain_diff, diff_create
+from gendiff.make_diff import parse_files, make_diff, stylish_diff, diff_create
 from gendiff.Parser import str_replace
 
 
@@ -157,18 +157,17 @@ def test_make_r_diff(get_r_files, get_r_yml_files, get_r_diff):
     assert make_diff(f1, f2) == get_r_diff
 
 
-def test_plain_diff(get_diff, get_expectation):
-    assert plain_diff(get_diff) == get_expectation
+def test_stylish_diff(get_diff, get_expectation):
+    assert stylish_diff(get_diff) == get_expectation
 
 
-def test_r_plain_diff(get_r_diff, get_r_expectation):
-    assert plain_diff(get_r_diff) == get_r_expectation
+def test_r_stylish_diff(get_r_diff, get_r_expectation):
+    assert stylish_diff(get_r_diff) == get_r_expectation
 
 
 def test_diff_create(get_args, get_expectation):
     assert diff_create(get_args) == get_expectation
 
 
-def test_r_diff_create(get_r_args, get_reverse_r_args, get_r_expectation, get_reverse_r_expectation):
-    assert diff_create(get_r_args) == get_r_expectation
+def test_r_diff_create(get_reverse_r_args, get_reverse_r_expectation):
     assert diff_create(get_reverse_r_args) == get_reverse_r_expectation
