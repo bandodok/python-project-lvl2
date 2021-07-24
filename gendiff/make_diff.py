@@ -68,18 +68,17 @@ def tree_to_str(tree, tree1):
 
 def str_to_tree(tree, tree1):
     value = get_value(get_value(tree))
-    key = get_key(get_value(tree))
-    out = mkfile(get_key(tree), mkfile(key, value, value), get_value(tree1))
+    key = get_key(get_value(tree1))
+    out = mkfile(get_key(tree), get_value(tree), mkfile(key, value, value))
     return out
 
 
 def update_status(out_tree, tree, tree1):
     for i, v in out_tree.items():
-        if get_key(v) != 'old':
-            if tree.get(i) is None:
-                out_tree[i].update({'status': 'add'})
-            if tree1.get(i) is None:
-                out_tree[i].update({'status': 'remove'})
+        if get_key(v) != 'old' and tree.get(i) is None:
+            out_tree[i].update({'status': 'add'})
+        if get_key(v) != 'old' and tree1.get(i) is None:
+            out_tree[i].update({'status': 'remove'})
 
 
 def value_is_dict(tree):
@@ -90,13 +89,13 @@ def make_diff(tree, tree1):
     if not value_is_dict(tree) and value_is_dict(tree1):
         output = tree_non_tree_diff(tree1)
         if get_value(tree):
-            out_tree = tree_to_str(tree, tree1)
+            out_tree = str_to_tree(tree, tree1)
         else:
             out_tree = mkdir(get_key(tree), output)
     elif value_is_dict(tree) and not value_is_dict(tree1):
         output = tree_non_tree_diff(tree)
         if get_value(tree1):
-            out_tree = str_to_tree(tree, tree1)
+            out_tree = tree_to_str(tree, tree1)
         else:
             out_tree = mkdir(get_key(tree), output)
     elif not value_is_dict(tree) and not value_is_dict(tree1):
@@ -105,7 +104,7 @@ def make_diff(tree, tree1):
         out1 = tree_to_tree_diff(tree, tree1)
         out_tree = mkdir(get_key(tree), out1)
     update_status(out_tree, tree, tree1)
-    return out_tree['MAIN']
+    return out_tree
 
 
 def plain_diff(diff):
@@ -126,4 +125,4 @@ def plain_diff(diff):
 
 def diff_create(args):
     file1, file2 = parse_files(args)
-    return plain_diff(make_diff(file1, file2))
+    return plain_diff(make_diff(file1, file2)['MAIN'])
