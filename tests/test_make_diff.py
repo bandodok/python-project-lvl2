@@ -70,7 +70,7 @@ def test_str_replace():
     str_replace(new_tree)
     assert new_tree == {
         'one': 'false',
-        'two': None,
+        'two': 'null',
         'three': 'true',
         'four': 'false'
     }

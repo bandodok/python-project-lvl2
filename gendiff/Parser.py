@@ -20,6 +20,7 @@ def str_replace(tree):
     corr_str = {
         False: 'false',
         True: 'true',
+        None: 'null'
     }
     for i, v in tree.items():
         if type(v) == dict:
