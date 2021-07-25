@@ -81,5 +81,9 @@ def test_diff_create(get_args, get_yml_args, get_expectation):
     assert diff_create(get_yml_args) == get_expectation
 
 
-def test_r_diff_create(get_reverse_r_args, get_reverse_r_expectation):
+def test_r_diff_create(get_r_args, get_r_expectation):
+    assert diff_create(get_r_args) == get_r_expectation
+
+
+def test_reverse_r_diff_create(get_reverse_r_args, get_reverse_r_expectation):
     assert diff_create(get_reverse_r_args) == get_reverse_r_expectation
