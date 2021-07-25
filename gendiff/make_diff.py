@@ -1,5 +1,6 @@
 from gendiff.Parser import parse_files
-from gendiff.stylish import stylish_diff
+from gendiff.format_stylish import stylish_diff
+from gendiff.format_plain import plain_diff
 
 
 def mkfile(key, old_value=None, new_value=None):
