@@ -99,3 +99,5 @@ def diff_create(args):
     diff = make_diff(file1, file2)['MAIN']
     if args['format'] == 'stylish':
         return stylish_diff(diff)
+    if args['format'] == 'plain':
+        return plain_diff(diff)
