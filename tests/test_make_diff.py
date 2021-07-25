@@ -1,14 +1,20 @@
 import pytest
-import json
-import yaml
 from ast import literal_eval
-from gendiff.make_diff import parse_files, make_diff, stylish_diff, diff_create
+from gendiff.make_diff import diff_create
 from gendiff.Parser import str_replace
 
 
 @pytest.fixture
 def get_args():
     args = 'tests/fixtures/json_args.txt'
+    output = [lines for lines in open(args)]
+    output = ''.join(output)
+    return literal_eval(output)
+
+
+@pytest.fixture
+def get_yml_args():
+    args = 'tests/fixtures/yml_args.txt'
     output = [lines for lines in open(args)]
     output = ''.join(output)
     return literal_eval(output)
@@ -26,74 +32,6 @@ def get_r_args():
 def get_reverse_r_args():
     args = 'tests/fixtures/reverse_r_json_args.txt'
     output = [lines for lines in open(args)]
-    output = ''.join(output)
-    return literal_eval(output)
-
-
-@pytest.fixture
-def get_yml_args():
-    args = 'tests/fixtures/yml_args.txt'
-    output = [lines for lines in open(args)]
-    output = ''.join(output)
-    return literal_eval(output)
-
-
-@pytest.fixture
-def get_files():
-    f1 = 'tests/fixtures/file1.json'
-    f2 = 'tests/fixtures/file2.json'
-    file1 = json.load(open(f1))
-    file2 = json.load(open(f2))
-    str_replace(file1)
-    str_replace(file2)
-    return {'MAIN': file1}, {'MAIN': file2}
-
-
-@pytest.fixture
-def get_yml_files():
-    f1 = 'tests/fixtures/file1.yml'
-    f2 = 'tests/fixtures/file2.yaml'
-    file1 = yaml.safe_load(open(f1))
-    file2 = yaml.safe_load(open(f2))
-    str_replace(file1)
-    str_replace(file2)
-    return {'MAIN': file1}, {'MAIN': file2}
-
-
-@pytest.fixture
-def get_r_files():
-    f1 = 'tests/fixtures/file3.json'
-    f2 = 'tests/fixtures/file4.json'
-    file1 = json.load(open(f1))
-    file2 = json.load(open(f2))
-    str_replace(file1)
-    str_replace(file2)
-    return {'MAIN': file1}, {'MAIN': file2}
-
-
-@pytest.fixture
-def get_r_yml_files():
-    f1 = 'tests/fixtures/file3.yml'
-    f2 = 'tests/fixtures/file4.yaml'
-    file1 = yaml.safe_load(open(f1))
-    file2 = yaml.safe_load(open(f2))
-    str_replace(file1)
-    str_replace(file2)
-    return {'MAIN': file1}, {'MAIN': file2}
-
-
-@pytest.fixture
-def get_diff():
-    diff = 'tests/fixtures/diff.txt'
-    output = [lines for lines in open(diff)]
-    output = ''.join(output)
-    return literal_eval(output)
-
-
-@pytest.fixture
-def get_r_diff():
-    diff = 'tests/fixtures/r_diff.txt'
-    output = [lines for lines in open(diff)]
     output = ''.join(output)
     return literal_eval(output)
 
@@ -138,35 +76,9 @@ def test_str_replace():
     }
 
 
-def test_make_files(get_args, get_files, get_yml_args, get_yml_files):
-    assert parse_files(get_args) == get_files
-    assert parse_files(get_yml_args) == get_yml_files
-
-
-def test_make_diff(get_files, get_yml_files, get_diff):
-    f1, f2, = get_files
-    assert make_diff(f1, f2) == get_diff
-    f1, f2, = get_yml_files
-    assert make_diff(f1, f2) == get_diff
-
-
-def test_make_r_diff(get_r_files, get_r_yml_files, get_r_diff):
-    f1, f2, = get_r_files
-    assert make_diff(f1, f2) == get_r_diff
-    f1, f2, = get_r_yml_files
-    assert make_diff(f1, f2) == get_r_diff
-
-
-def test_stylish_diff(get_diff, get_expectation):
-    assert stylish_diff(get_diff) == get_expectation
-
-
-def test_r_stylish_diff(get_r_diff, get_r_expectation):
-    assert stylish_diff(get_r_diff) == get_r_expectation
-
-
-def test_diff_create(get_args, get_expectation):
+def test_diff_create(get_args, get_yml_args, get_expectation):
     assert diff_create(get_args) == get_expectation
+    assert diff_create(get_yml_args) == get_expectation
 
 
 def test_r_diff_create(get_reverse_r_args, get_reverse_r_expectation):
