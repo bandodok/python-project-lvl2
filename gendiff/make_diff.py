@@ -12,17 +12,11 @@ def mkdir(key, value, status=None):
 
 
 def get_value(tree):
-    try:
-        return next(iter(tree.values()))
-    except Exception:
-        return None
+    return next(iter(tree.values()))
 
 
 def get_key(tree):
-    try:
-        return next(iter(tree))
-    except Exception:
-        return None
+    return next(iter(tree))
 
 
 def tree_non_tree_diff(tree):
