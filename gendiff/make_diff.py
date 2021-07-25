@@ -73,25 +73,8 @@ def str_to_tree(tree, tree1):
     return out
 
 
-def update_status(out_tree, tree, tree1):
-    for i, v in out_tree.items():
-        if get_key(v) != 'old' and tree.get(i) is None:
-            out_tree[i].update({'status': 'add'})
-        if get_key(v) != 'old' and tree1.get(i) is None:
-            out_tree[i].update({'status': 'remove'})
-
-
 def value_is_dict(tree):
     return type(get_value(tree)) == dict
-
-
-def dir_format(index, value, out, depth):
-    if value.get('status') == 'add':
-        out.append('{}+ {}: {}'.format((' ' * depth), index, '{'))
-    elif value.get('status') == 'remove':
-        out.append('{}- {}: {}'.format((' ' * depth), index, '{'))
-    else:
-        out.append('{}  {}: {}'.format((' ' * depth), index, '{'))
 
 
 def make_diff(tree, tree1):
@@ -100,20 +83,57 @@ def make_diff(tree, tree1):
         if get_value(tree):
             out_tree = str_to_tree(tree, tree1)
         else:
-            out_tree = mkdir(get_key(tree), output)
+            out_tree = mkfile(get_key(tree), get_value(tree), output)
     elif value_is_dict(tree) and not value_is_dict(tree1):
         output = tree_non_tree_diff(tree)
         if get_value(tree1):
             out_tree = tree_to_str(tree, tree1)
         else:
-            out_tree = mkdir(get_key(tree), output)
+            out_tree = mkfile(get_key(tree), output, get_value(tree1))
     elif not value_is_dict(tree) and not value_is_dict(tree1):
         return mkfile(get_key(tree), get_value(tree), get_value(tree1))
     else:
         out1 = tree_to_tree_diff(tree, tree1)
         out_tree = mkdir(get_key(tree), out1)
-    update_status(out_tree, tree, tree1)
+
     return out_tree
+
+
+def dict_format(i, v, depth):
+    sign = None
+    inner_value = v
+    new_out = []
+    if get_key(v) != 'old':
+        new_out.append('{}  {}: {}'.format((' ' * depth), i, '{'))
+    elif type(v['old']) is dict:
+        if type(v['new']) is not dict and v['new'] is not None:
+            sign = '+'
+        new_out.append('{}- {}: {}'.format((' ' * depth), i, '{'))
+        inner_value = v['old']
+    elif type(v['new']) is dict:
+        if type(v['old']) is not dict and v['old'] is not None:
+            new_out.append('{}- {}: {}'.format((' ' * depth), i, v['old']))
+        new_out.append('{}+ {}: {}'.format((' ' * depth), i, '{'))
+        inner_value = v['new']
+    return sign, inner_value, '\n'.join(new_out)
+
+
+def file_format(i, v, depth):
+    new_out = []
+    if v['old'] == v['new']:
+        new_out.append('{}  {}: {}'.format((' ' * depth), i, v['new']))
+    elif v['old'] is None:
+        new_out.append('{}+ {}: {}'.format((' ' * depth), i, v['new']))
+    elif v['new'] is None:
+        new_out.append('{}- {}: {}'.format((' ' * depth), i, v['old']))
+    else:
+        new_out.append('{}- {}: {}'.format((' ' * depth), i, v['old']))
+        new_out.append('{}+ {}: {}'.format((' ' * depth), i, v['new']))
+    return '\n'.join(new_out)
+
+
+def new_or_old_is_dict(v):
+    return type(v['old']) is dict or type(v['new']) is dict
 
 
 def stylish_diff(diff):
@@ -121,34 +141,16 @@ def stylish_diff(diff):
 
     def inner(diff, depth):
         for i, v in diff.items():
-            if i == 'MAIN':
-                inner(v, depth)
-                return "\n".join(out)
-            if i == 'status':
-                continue
-            if get_key(v) != 'old':
-                dir_format(i, v, out, depth)
-                new_depth = depth + 4
-                inner(v, new_depth)
-            elif v['old'] is None:
-                out.append('{}+ {}: {}'.format((' ' * depth), i, v['new']))
-            elif v['new'] is None:
-                out.append('{}- {}: {}'.format((' ' * depth), i, v['old']))
-            elif v['old'] == v['new']:
-                out.append('{}  {}: {}'.format((' ' * depth), i, v['new']))
-            else:
-                if type(v['old']) is dict:
-                    new_depth = depth + 4
-                    out.append('{}- {}: {}'.format((' ' * depth), i, '{'))
-                    inner(v['old'], new_depth)
-                else:
-                    out.append('{}- {}: {}'.format((' ' * depth), i, v['old']))
-                if type(v['new']) is dict:
-                    new_depth = depth + 4
-                    out.append('{}+ {}: {}'.format((' ' * depth), i, '{'))
-                    inner(v['new'], new_depth)
-                else:
+            new_depth = depth + 4
+            if get_key(v) != 'old' or new_or_old_is_dict(v):
+                sign, inner_value, new_out = dict_format(i, v, depth)
+                out.append(new_out)
+                inner(inner_value, new_depth)
+                if sign == '+':
                     out.append('{}+ {}: {}'.format((' ' * depth), i, v['new']))
+            else:
+                new_out = file_format(i, v, depth)
+                out.append(new_out)
         out.append('{}'.format(' ' * (depth - 2)) + '}')
         return "\n".join(out)
     return inner(diff, 2)
@@ -157,4 +159,4 @@ def stylish_diff(diff):
 def diff_create(args):
     file1, file2 = parse_files(args)
     if args['format'] == 'stylish':
-        return stylish_diff(make_diff(file1, file2))
+        return stylish_diff(make_diff(file1, file2)['MAIN'])
