@@ -96,6 +96,6 @@ def make_diff(tree, tree1):
 
 def diff_create(args):
     file1, file2 = parse_files(args)
+    diff = make_diff(file1, file2)['MAIN']
     if args['format'] == 'stylish':
-        diff = make_diff(file1, file2)['MAIN']
         return stylish_diff(diff)
