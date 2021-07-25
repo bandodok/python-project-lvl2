@@ -37,6 +37,14 @@ def get_reverse_r_args():
 
 
 @pytest.fixture
+def get_plain_args():
+    args = 'tests/fixtures/plain_args.txt'
+    output = [lines for lines in open(args)]
+    output = ''.join(output)
+    return literal_eval(output)
+
+
+@pytest.fixture
 def get_expectation():
     expect = 'tests/fixtures/expectation.txt'
     output = [lines for lines in open(expect)]
@@ -55,6 +63,14 @@ def get_r_expectation():
 @pytest.fixture
 def get_reverse_r_expectation():
     expect = 'tests/fixtures/reverse_r_expectation.txt'
+    output = [lines for lines in open(expect)]
+    output = ''.join(output)
+    return output
+
+
+@pytest.fixture
+def get_plain_expectation():
+    expect = 'tests/fixtures/plain_expectation.txt'
     output = [lines for lines in open(expect)]
     output = ''.join(output)
     return output
@@ -87,3 +103,7 @@ def test_r_diff_create(get_r_args, get_r_expectation):
 
 def test_reverse_r_diff_create(get_reverse_r_args, get_reverse_r_expectation):
     assert diff_create(get_reverse_r_args) == get_reverse_r_expectation
+
+
+def test_plain_diff_create(get_plain_args, get_plain_expectation):
+    assert diff_create(get_plain_args) == get_plain_expectation
