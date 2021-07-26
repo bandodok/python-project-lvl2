@@ -1,1 +1,0 @@
-{'first_file': 'tests/fixtures/file3.json', 'second_file': 'tests/fixtures/file4.json', 'format': 'plain'}

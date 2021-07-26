@@ -75,30 +75,29 @@ def value_is_dict(tree):
 
 def make_diff(tree, tree1):
     if not value_is_dict(tree) and value_is_dict(tree1):
-        output = tree_non_tree_diff(tree1)
         if get_value(tree):
             out_tree = str_to_tree(tree, tree1)
         else:
+            output = tree_non_tree_diff(tree1)
             out_tree = mkfile(get_key(tree), get_value(tree), output)
     elif value_is_dict(tree) and not value_is_dict(tree1):
-        output = tree_non_tree_diff(tree)
         if get_value(tree1):
             out_tree = tree_to_str(tree, tree1)
         else:
+            output = tree_non_tree_diff(tree)
             out_tree = mkfile(get_key(tree), output, get_value(tree1))
-    elif not value_is_dict(tree) and not value_is_dict(tree1):
+    elif not all((value_is_dict(tree), value_is_dict(tree1))):
         return mkfile(get_key(tree), get_value(tree), get_value(tree1))
     else:
         out1 = tree_to_tree_diff(tree, tree1)
         out_tree = mkdir(get_key(tree), out1)
-
     return out_tree
 
 
-def diff_create(args):
-    file1, file2 = parse_files(args)
+def generate_diff(file1, file2, format_='stylish'):
+    file1, file2 = parse_files(file1, file2)
     diff = make_diff(file1, file2)['MAIN']
-    if args['format'] == 'stylish':
+    if format_ == 'stylish':
         return stylish_diff(diff)
-    if args['format'] == 'plain':
+    if format_ == 'plain':
         return plain_diff(diff)

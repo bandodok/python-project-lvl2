@@ -1,47 +1,34 @@
 import pytest
-from ast import literal_eval
-from gendiff.make_diff import diff_create
+from gendiff.make_diff import generate_diff
 from gendiff.Parser import str_replace
 
 
 @pytest.fixture
-def get_args():
-    args = 'tests/fixtures/json_args.txt'
-    output = [lines for lines in open(args)]
-    output = ''.join(output)
-    return literal_eval(output)
+def get_files():
+    file1 = 'tests/fixtures/file1.json'
+    file2 = 'tests/fixtures/file2.json'
+    return file1, file2
 
 
 @pytest.fixture
-def get_yml_args():
-    args = 'tests/fixtures/yml_args.txt'
-    output = [lines for lines in open(args)]
-    output = ''.join(output)
-    return literal_eval(output)
+def get_yml_files():
+    file1 = 'tests/fixtures/file1.yml'
+    file2 = 'tests/fixtures/file2.yaml'
+    return file1, file2
 
 
 @pytest.fixture
-def get_r_args():
-    args = 'tests/fixtures/r_json_args.txt'
-    output = [lines for lines in open(args)]
-    output = ''.join(output)
-    return literal_eval(output)
+def get_r_files():
+    file1 = 'tests/fixtures/file3.json'
+    file2 = 'tests/fixtures/file4.json'
+    return file1, file2
 
 
 @pytest.fixture
-def get_reverse_r_args():
-    args = 'tests/fixtures/reverse_r_json_args.txt'
-    output = [lines for lines in open(args)]
-    output = ''.join(output)
-    return literal_eval(output)
-
-
-@pytest.fixture
-def get_plain_args():
-    args = 'tests/fixtures/plain_args.txt'
-    output = [lines for lines in open(args)]
-    output = ''.join(output)
-    return literal_eval(output)
+def get_r_yml_files():
+    file1 = 'tests/fixtures/file3.yml'
+    file2 = 'tests/fixtures/file4.yaml'
+    return file1, file2
 
 
 @pytest.fixture
@@ -92,18 +79,29 @@ def test_str_replace():
     }
 
 
-def test_diff_create(get_args, get_yml_args, get_expectation):
-    assert diff_create(get_args) == get_expectation
-    assert diff_create(get_yml_args) == get_expectation
+def test_diff_create(get_files, get_yml_files, get_expectation):
+    file1, file2 = get_files
+    file3, file4 = get_yml_files
+    assert generate_diff(file1, file2) == get_expectation
+    assert generate_diff(file3, file4) == get_expectation
 
 
-def test_r_diff_create(get_r_args, get_r_expectation):
-    assert diff_create(get_r_args) == get_r_expectation
+def test_r_diff_create(get_r_files, get_r_yml_files, get_r_expectation):
+    file1, file2 = get_r_files
+    file3, file4 = get_r_yml_files
+    assert generate_diff(file1, file2) == get_r_expectation
+    assert generate_diff(file3, file4) == get_r_expectation
 
 
-def test_reverse_r_diff_create(get_reverse_r_args, get_reverse_r_expectation):
-    assert diff_create(get_reverse_r_args) == get_reverse_r_expectation
+def test_reverse_r_diff_create(get_r_files, get_r_yml_files, get_reverse_r_expectation):
+    file1, file2 = get_r_files
+    file3, file4 = get_r_yml_files
+    assert generate_diff(file2, file1) == get_reverse_r_expectation
+    assert generate_diff(file4, file3) == get_reverse_r_expectation
 
 
-def test_plain_diff_create(get_plain_args, get_plain_expectation):
-    assert diff_create(get_plain_args) == get_plain_expectation
+def test_plain_diff_create(get_r_files, get_r_yml_files, get_plain_expectation):
+    file1, file2 = get_r_files
+    file3, file4 = get_r_yml_files
+    assert generate_diff(file1, file2, 'plain') == get_plain_expectation
+    assert generate_diff(file3, file4, 'plain') == get_plain_expectation

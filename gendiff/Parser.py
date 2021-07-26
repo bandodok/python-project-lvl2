@@ -2,13 +2,13 @@ import json
 import yaml
 
 
-def parse_files(args):
-    file1 = open(args['first_file'])
-    file2 = open(args['second_file'])
-    if args['first_file'].endswith('.json'):
+def parse_files(first_file, second_file):
+    file1 = open(first_file)
+    file2 = open(second_file)
+    if first_file.endswith('.json'):
         file1 = json.load(file1)
         file2 = json.load(file2)
-    elif args['first_file'].endswith(('.yml', '.yaml')):
+    elif first_file.endswith(('.yml', '.yaml')):
         file1 = yaml.safe_load(file1)
         file2 = yaml.safe_load(file2)
     str_replace(file1)
