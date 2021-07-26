@@ -93,11 +93,9 @@ def test_r_diff_create(get_r_files, get_r_yml_files, get_r_expectation):
     assert generate_diff(file3, file4) == get_r_expectation
 
 
-def test_reverse_r_diff_create(get_r_files, get_r_yml_files, get_reverse_r_expectation):
+def test_reverse_r_diff_create(get_r_files, get_reverse_r_expectation):
     file1, file2 = get_r_files
-    file3, file4 = get_r_yml_files
     assert generate_diff(file2, file1) == get_reverse_r_expectation
-    assert generate_diff(file4, file3) == get_reverse_r_expectation
 
 
 def test_plain_diff_create(get_r_files, get_r_yml_files, get_plain_expectation):
