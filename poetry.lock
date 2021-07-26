@@ -171,7 +171,7 @@ testing = ["fields", "hunter", "process-tests", "six", "pytest-xdist", "virtuale
 name = "pyyaml"
 version = "5.4.1"
 description = "YAML parser and emitter for Python"
-category = "dev"
+category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*"
 
@@ -186,7 +186,7 @@ python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "db5c0f7c2876fab4e27f576c020715d72e93d04acf562fa4b0e2649593524132"
+content-hash = "dc457d8052bf1a12eb7bb67a14a9508e5c62f5aabd76cd159a61c8f023361273"
 
 [metadata.files]
 argparse = [
