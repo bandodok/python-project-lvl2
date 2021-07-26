@@ -1,6 +1,7 @@
 from gendiff.Parser import parse_files
 from gendiff.format_stylish import stylish_diff
 from gendiff.format_plain import plain_diff
+from gendiff.format_json import json_diff
 
 
 def mkfile(key, old_value=None, new_value=None):
@@ -101,3 +102,5 @@ def generate_diff(file1, file2, format_='stylish'):
         return stylish_diff(diff)
     if format_ == 'plain':
         return plain_diff(diff)
+    if format_ == 'json':
+        return json_diff(diff)
