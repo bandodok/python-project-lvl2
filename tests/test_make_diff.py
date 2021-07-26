@@ -1,5 +1,5 @@
 import pytest
-from gendiff.make_diff import generate_diff
+from gendiff.gendiff import generate_diff
 from gendiff.Parser import str_replace
 
 

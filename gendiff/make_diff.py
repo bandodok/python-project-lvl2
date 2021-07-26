@@ -1,9 +1,3 @@
-from gendiff.Parser import parse_files
-from gendiff.format_stylish import stylish_diff
-from gendiff.format_plain import plain_diff
-from gendiff.format_json import json_diff
-
-
 def mkfile(key, old_value=None, new_value=None):
     return {key: {'old': old_value, 'new': new_value}}
 
@@ -93,14 +87,3 @@ def make_diff(tree, tree1):
         out1 = tree_to_tree_diff(tree, tree1)
         out_tree = mkdir(get_key(tree), out1)
     return out_tree
-
-
-def generate_diff(file1, file2, format_='stylish'):
-    file1, file2 = parse_files(file1, file2)
-    diff = make_diff(file1, file2)['MAIN']
-    if format_ == 'stylish':
-        return stylish_diff(diff)
-    if format_ == 'plain':
-        return plain_diff(diff)
-    if format_ == 'json':
-        return json_diff(diff)
