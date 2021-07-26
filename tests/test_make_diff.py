@@ -63,6 +63,14 @@ def get_plain_expectation():
     return output
 
 
+@pytest.fixture
+def get_json_expectation():
+    expect = 'tests/fixtures/json_r_expectation.txt'
+    output = [lines for lines in open(expect)]
+    output = ''.join(output)
+    return output
+
+
 def test_str_replace():
     new_tree = {
         'one': False,
@@ -103,3 +111,10 @@ def test_plain_diff_create(get_r_files, get_r_yml_files, get_plain_expectation):
     file3, file4 = get_r_yml_files
     assert generate_diff(file1, file2, 'plain') == get_plain_expectation
     assert generate_diff(file3, file4, 'plain') == get_plain_expectation
+
+
+def test_json_diff_create(get_r_files, get_r_yml_files, get_json_expectation):
+    file1, file2 = get_r_files
+    file3, file4 = get_r_yml_files
+    assert generate_diff(file1, file2, 'json') == get_json_expectation
+    assert generate_diff(file3, file4, 'json') == get_json_expectation
