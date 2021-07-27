@@ -17,14 +17,11 @@ def parse_files(first_file, second_file):
 
 
 def str_replace(tree):
-    corr_str = {
-        False: 'false',
-        True: 'true',
-        None: 'null'
-    }
     for i, v in tree.items():
         if type(v) == dict:
             str_replace(v)
-        elif v in corr_str.keys():
-            tree[i] = corr_str[v]
+        elif v is False or v is True:
+            tree[i] = str(v).lower()
+        elif v is None:
+            tree[i] = 'null'
     return tree
