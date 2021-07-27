@@ -6,6 +6,8 @@ def str_replace(value):
     corr_str = ['false', 'true', 'null']
     if value in corr_str:
         return value
+    if type(value) is int:
+        return value
     return '\'' + str(value) + '\''
 
 
