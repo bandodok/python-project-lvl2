@@ -12,7 +12,7 @@ def main():
     file1 = args['first_file']
     file2 = args['second_file']
     format_ = args['format']
-    return generate_diff(file1, file2, format_)
+    return print(generate_diff(file1, file2, format_))
 
 
 if __name__ == '__main__':
